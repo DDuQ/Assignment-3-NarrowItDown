@@ -13,7 +13,8 @@ function foundItemsDirective() {
     restrict: 'E',
     scope: {
       items: '<',
-      onRemove: '&'
+      onRemove: '&',
+      checked: '<'
     }
   };
   return ddo;
@@ -23,19 +24,32 @@ NarrowItDownController.$inject = ['MenuSearchService'];
 function NarrowItDownController(MenuSearchService) {
   var menu = this ;
 
+  menu.checked= true;
   menu.searchTerm= "";
-  menu.found = []
+  menu.found = [];
   menu.getMatchedMenuItems = function () {
-      console.log("SearchTerm seen in ctrl: ", menu.searchTerm );
+      if(menu.searchTerm == ""){
+        menu.found = [];
+        menu.checked = false;
+      }else {
+        menu.checked=true;
+      };
+
+
+    if (menu.checked == true){
       menu.found = MenuSearchService.getMatchedMenuItems(menu.searchTerm);
-      console.log("menu.found as seen at ctrl: ", menu.found);
-      console.log("menu.found as seen at ctrl: ", menu.found.name);
-  }
+    }
+      console.log("My SearchTerm is:  ", menu.searchTerm );
+      console.log("menu.found is retrieving: ", menu.found);
+
+  };
 
 
   menu.removeItem = function (itemIndex) {
   menu.found.splice(itemIndex, 1);
   };
+
+
 
 
 }
